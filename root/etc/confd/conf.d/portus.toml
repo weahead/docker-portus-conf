@@ -1,0 +1,6 @@
+[template]
+src = "portus.tmpl"
+dest = "/usr/local/etc/portus/portus.conf"
+keys = [
+  "/self/service/metadata"
+]

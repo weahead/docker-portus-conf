@@ -1,0 +1,5 @@
+[template]
+src = "puma.tmpl"
+dest = "/usr/local/etc/portus/puma.rb"
+keys = [
+]

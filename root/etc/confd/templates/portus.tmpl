@@ -1,0 +1,102 @@
+# Settings for the Portus mailer.
+email:
+  from: {{getv "/self/service/metadata/email_from"}}
+  name: "Portus"
+  reply_to: {{getv "/self/service/metadata/email_from"}}
+
+  # If enabled, then SMTP will be used. Otherwise 'sendmail' will be used
+  # (defaults to: /usr/sbin/sendmail -i -t).
+  smtp:
+    enabled: true
+    address: {{getv "/self/service/metadata/smtp_address"}}
+    port: {{getv "/self/service/metadata/smtp_port"}}
+    user_name: {{getv "/self/service/metadata/email_from"}}
+    password: {{getv "/self/service/metadata/email_password"}}
+    domain: {{getv "/self/service/metadata/email_domain"}}
+
+# If enabled, then the profile picture will be picked from the Gravatar
+# associated with each user. See: https://en.gravatar.com/
+gravatar:
+  enabled: true
+
+# LDAP support. If enabled, then only users of the specified LDAP server will
+# be able to use Portus.
+ldap:
+  enabled: true
+
+  hostname: {{getv "/self/service/metadata/ldap_hostname"}}
+  port: {{getv "/self/service/metadata/ldap_port"}}
+
+  # Available options: "plain", "simple_tls" and "starttls". The default is
+  # "plain", the recommended is "starttls".
+  method: "starttls"
+
+  # The base where users are located (e.g. "ou=users,dc=example,dc=com").
+  base: {{getv "/self/service/metadata/ldap_base"}}
+
+  # User filter (e.g. "mail=george*").
+  filter: ""
+
+  # The LDAP attribute where to search for username. The default is 'uid'.
+  uid: "uid"
+
+  # LDAP credentials used to search for a user.
+  authentication:
+    enabled: true
+    bind_dn: {{getv "/self/service/metadata/ldap_binddn"}}
+    password: {{getv "/self/service/metadata/ldap_bindpw"}}
+
+  # Portus needs an email for each user, but there's no standard way to get
+  # that from LDAP servers. You can tell Portus how to get the email from users
+  # registered in the LDAP server with this configurable value. There are three
+  # possibilities:
+  #
+  #   - disabled: this is the default value. It means that Portus won't do a
+  #     thing when registering LDAP users (users will be redirected to their
+  #     profile page until they setup an email account).
+  #   - enabled where "attr" is empty: for this you need "ldap.base" to have
+  #     some value. In this case, the hostname will be guessed from the domain
+  #     component of the provided base string. For example, for the dn:
+  #     "ou=users,dc=example,dc=com", and a user name "user", the resulting
+  #     email is "user@example.com".
+  #   - enabled where "attr" is not empty: with this you specify the attribute
+  #     inside a LDIF record where the email is set.
+  #
+  # If something goes wrong when trying to guess the email, then it just falls
+  # back to the default behavior (empty email).
+  guess_email:
+    enabled: true
+    attr: {{getv "/self/service/metadata/ldap_email_attr"}}
+
+# Set first_user_admin to true if you want that the first user that signs up
+# to be an admin.
+#
+# Set to false otherwise. Then you will need to run
+#   rake portus:make_admin[USERNAME]
+# in order to set the admin user
+first_user_admin:
+  enabled: true
+
+# If enabled, then users can signup with the signup form. Otherwise, the admin
+# is responsible of creating new users by either:
+#   - Using the "portus:create_user" rake task.
+#   - Using the form available in the admin panel.
+# This is ignored if LDAP is enabled.
+signup:
+  enabled: false
+
+# By default require ssl to be enabled when running on production
+check_ssl_usage:
+  enabled: false
+
+# Set the expiration time for the JWT Token that Portus uses to authenticate
+# with the registry. Note that this is just a work-around on the fact that the
+# registry does not try to get a new token again after the current one has
+# expired. Once a solution is issued upstream, we can deprecate this option.
+#
+# See: https://github.com/SUSE/Portus/issues/510
+jwt_expiration_time:
+  value: "10.minutes"
+
+machine_fqdn:
+  value: {{getv "/self/service/metadata/fqdn"}}
