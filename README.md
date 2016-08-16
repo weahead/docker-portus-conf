@@ -1,6 +1,6 @@
 # We ahead's Portus configuration
 
-[![latest 2.0.0](https://img.shields.io/badge/latest-2.0.0-green.svg)](https://github.com/weahead/docker-portus-conf/releases/tag/v2.0.0)
+[![latest 2.0.1](https://img.shields.io/badge/latest-2.0.1-green.svg)](https://github.com/weahead/docker-portus-conf/releases/tag/v2.0.1)
 
 Docker image that puts configuration for Portus on a volume at `/usr/local/etc/portus` via [confd](https://github.com/kelseyhightower/confd).
 
